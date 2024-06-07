@@ -23,21 +23,20 @@ wss.on('connection', (ws) => {
     const targetId = jsonMessage.targetId;
     const message = jsonMessage.message;
 
-    console.log(targetId, message);
     clients.forEach((client) => {
       if (
         client.client.readyState == WebSocket.OPEN &&
         client.id !== targetId
       ) {
-        client.client.send(JSON.stringify({ message, type: 'message' }), {
+        client.client.send(JSON.stringify({ type: 'message', message }), {
           binary: false,
         });
       }
     });
   });
-
   console.log(`Connected with id: ${id}`);
-  ws.send(JSON.stringify({ type: 'id', id }));
+
+  ws.send(JSON.stringify({ type: 'id', id }), { binary: false });
 });
 
 server.listen(3000, () => {
